@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'blog-excercise.herokuapp.com/',
+    'blog-excercise-913a145fa962.herokuapp.com/',
     '127.0.0.1',
     'localhost',
 ]
