@@ -29,7 +29,7 @@ class Comment(models.Model):
     Body = models.TextField()
     approved = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
-    challenge = models.SlugField(max_length=200, unique=True)
+    # challenge = models.SlugField(max_length=200, unique=True)
 
     class Meta:
         ordering = ['created_on']

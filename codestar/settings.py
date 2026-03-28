@@ -13,13 +13,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
-if os.path.isfile('env.py'):
-    import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Load environment defaults from project root when present.
+if (BASE_DIR / 'env.py').is_file():
+    import env
 
 
 # Quick-start development settings - unsuitable for production
@@ -29,7 +31,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'django_summernote',
+    'about',
 ]
 
 MIDDLEWARE = [
@@ -90,9 +93,20 @@ WSGI_APPLICATION = 'codestar.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
-}
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
+    }
+else:
+    # Fallback for local dev when DATABASE_URL is not exported.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.codeinstitute-ide.net/",
